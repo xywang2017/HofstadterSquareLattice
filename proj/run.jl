@@ -3,24 +3,25 @@ using PyPlot
 using Parameters
 using JLD
 using Printf
-fpath="/Users/xiaoyu/Code/HofstadterSquareLattice/"
+fpath="/Users/xiaoyuw/Desktop/HofstadterSquareLattice/"
 include(joinpath(fpath,"libs/Hofstadter.jl"))
 
 ##
-q = 25
-ps = collect(0:q)
+q = 64
+p = 17
+# ps = collect(0:q)
 data = Dict()
-for ip in eachindex(ps)
-    @printf("p/q=%d/%d\n",ps[ip],q);
-    h0,hof = computeHofstadter(p=ps[ip],q=q);
-    data["$ip"] = hof.spectrum[:];
-end
-save("Q$(q)_results.jld","data",data)
+# for ip in eachindex(ps)
+    @printf("p/q=%d/%d\n",p,q);
+    h0,hof = computeHofstadter(p=p,q=q);
+    data["1"] = hof.spectrum[:];
+# end
+# save("Q$(q)_results.jld","data",data)
 
 ##
 fig = figure(figsize=(4,3))
 colors = ["b","b","b","b","b"]
-qs = [25]
+qs = [64]
 for iq in eachindex(qs)
     q = qs[iq]
     data = load("Q$(q)_results.jld","data")

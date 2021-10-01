@@ -41,7 +41,7 @@ function computeHofstadter(;p::Int=7,q::Int=64,ndim::Int=9)
     B.k2 = A.k2 
     B.kvec = A.kvec 
     B.nbands = A.nbands 
-    B.δq2 = 1
+    B.δq2 = B.p
     
     B.O0 = zeros(Float64,B.l1,B.l1,B.l2,ndim)
     B.O1 = zeros(Float64,B.l1,B.l1,B.l2,ndim)
@@ -104,7 +104,7 @@ function computeHofstadter(;p::Int=7,q::Int=64,ndim::Int=9)
     for i1 in eachindex(B.k1)
         for n in eachindex(B.nvec)
             θc = reshape(exp.(-1im * 2π * B.k1 * B.nvec[n]),1,B.l1)
-            θϕ = exp.(1im * 2π * B.nvec[n]* B.k1[i1])
+            θϕ = exp(1im * 2π * B.nvec[n]* B.k1[i1])
             qϕ2 = B.nvec[n] * B.δq2
             tmp = eachindex(B.k2) .- qϕ2   # split into [k1-q1] + δg
             k2c = mod.(tmp .-1,B.l2) .+ 1
