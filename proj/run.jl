@@ -7,34 +7,35 @@ fpath="/Users/xiaoyuw/Desktop/HofstadterSquareLattice/"
 include(joinpath(fpath,"libs/Hofstadter.jl"))
 
 ##
-q = 64
-p = 17
-# ps = collect(0:q)
+q = 83
+# p = 17
+ps = collect(0:q)
 data = Dict()
-# for ip in eachindex(ps)
-    @printf("p/q=%d/%d\n",p,q);
-    h0,hof = computeHofstadter(p=p,q=q);
-    data["1"] = hof.spectrum[:];
-# end
-# save("Q$(q)_results.jld","data",data)
+for ip in eachindex(ps)
+    @printf("p/q=%d/%d\n",ps[ip],q);
+    h0,hof = computeHofstadter(p=ps[ip],q=q);
+    data["$ip"] = hof.spectrum[:];
+end
+save("Q$(q)_results.jld","data",data)
 
 ##
 fig = figure(figsize=(4,3))
 colors = ["b","b","b","b","b"]
-qs = [64]
+qs = [25,83]
+ϵ0 = π^2/2
 for iq in eachindex(qs)
     q = qs[iq]
     data = load("Q$(q)_results.jld","data")
     ps = collect(0:q)
     for ip in eachindex(ps)
         ϵ = data["$ip"]
-        plot(ones(size(ϵ))*ps[ip]/q,ϵ,".",c=colors[iq],ms=1.5,markerfacecolor="b",markeredgecolor="none")
+        plot(ones(size(ϵ))*ps[ip]/q,ϵ/ϵ0,".",c=colors[iq],ms=1.5,markerfacecolor="b",markeredgecolor="none")
     end
 end
 ylabel(L"ϵ")
 xlabel(L"ϕ/ϕ_0")
 tight_layout()
-savefig("energy_flux.pdf")
+savefig("energy_fluxv2.pdf")
 display(fig)
 close(fig)
 
@@ -68,3 +69,9 @@ axis("equal")
 tight_layout()
 display(fig)
 close(fig)
+
+##
+h0,hof,hn = computeHofstadter(p=1,q=q);
+
+##
+sort(abs.(eigvals(hn[:,:,1,4])))

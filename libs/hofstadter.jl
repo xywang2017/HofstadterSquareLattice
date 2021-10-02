@@ -75,6 +75,7 @@ function computeHofstadter(;p::Int=7,q::Int=64,ndim::Int=9)
                 uc = view(A.Uk,:,1,i1c,i2c)
                 uc = reshape(uc,A.lg,A.lg)
                 uc = reshape(circshift(uc,(0,-δg2[i2r])),A.lg^2)
+                # uc = reshape(circshift(uc,(0,0)),A.lg^2)
                 λrc = ur' * uc
                 B.O0[i1r,i1c,i2r,n] = λrc 
                 B.O1[i1r,i1c,i2r,n] = A.Hk[1,i1r,i2r]*λrc
@@ -98,7 +99,7 @@ function computeHofstadter(;p::Int=7,q::Int=64,ndim::Int=9)
     #    end 
     end
 
-
+    Hn =  zeros(ComplexF64,B.l2,B.l2,B.l1,ndim)
     B.H = zeros(ComplexF64,B.l2,B.l2,B.l1)
     B.M = zeros(ComplexF64,B.l2,B.l2,B.l1)
     for i1 in eachindex(B.k1)
@@ -112,6 +113,7 @@ function computeHofstadter(;p::Int=7,q::Int=64,ndim::Int=9)
                 i2c = k2c[i2r]
                 B.H[i2r,i2c,i1] += sum(view(B.O1,:,:,i2r,n).*θc) * θϕ /B.l1
                 B.M[i2r,i2c,i1] += sum(view(B.O0,:,:,i2r,n).*θc) * θϕ /B.l1
+                Hn[i2r,i2c,i1,n] += sum(view(B.O1,:,:,i2r,n).*θc) * θϕ /B.l1
             end
         end
         B.H[:,:,i1] = (B.H[:,:,i1]+ B.H[:,:,i1]')/2
@@ -129,5 +131,5 @@ function computeHofstadter(;p::Int=7,q::Int=64,ndim::Int=9)
         F = eigen(Hermitian(Hnew))
         B.spectrum[:,i1] = F.values
     end
-    return A,B
+    return A,B,Hn
 end
