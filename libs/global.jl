@@ -67,9 +67,11 @@ function ComputeEigenSpectrum(A::Hamiltonian,ik::Int)
     H = zeros(Float64,A.lg^2,A.lg^2)
 
     k = view(A.kvec,:)[ik]
+    # k0 = 0.5*(1+1im)*2π
+    k0 = 0.0 + 0.0im
     gvec = reshape(A.gvec,:)
     for ig in eachindex(gvec)
-        H[ig,ig] = abs(k+gvec[ig])^2/(2*A.m)
+        H[ig,ig] = abs(k+gvec[ig]-k0)^2/(2*A.m)
 
         ig1 = mod(ig-1,A.lg) + 1
         ig2 = (ig-1)÷A.lg + 1 
@@ -98,5 +100,8 @@ function ComputeEigenSpectrum(A::Hamiltonian,ik::Int)
     i1 = mod(ik-1,A.l1) + 1
     i2 = (ik-1)÷A.l1 + 1
     A.Hk[:,i1,i2], A.Uk[:,:,i1,i2] = eigs(Hermitian(H),nev=A.nbands,which=:SM)
+    # tmp = eigen(Hermitian(H))
+    # A.Hk[1,i1,i2] = tmp.values[1]
+    # A.Uk[:,1,i1,i2] = tmp.vectors[:,1]
     return nothing
 end

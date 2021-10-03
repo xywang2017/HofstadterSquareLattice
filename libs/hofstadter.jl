@@ -71,14 +71,17 @@ function computeHofstadter(;p::Int=7,q::Int=64,ndim::Int=9)
             i2c = k2c[i2r]
             for i1r in eachindex(B.k1) 
                 i1c = i1r
-                ur = view(A.Uk,:,1,i1r,i2r) 
-                uc = view(A.Uk,:,1,i1c,i2c)
+                ur = A.Uk[:,1,i1r,i2r]
+                uc = A.Uk[:,1,i1c,i2c]
+                # ur = reshape(circshift(reshape(ur,A.lg,A.lg),(0,δg2[i2r])),A.lg^2)
                 uc = reshape(uc,A.lg,A.lg)
-                uc = reshape(circshift(uc,(0,-δg2[i2r])),A.lg^2)
-                # uc = reshape(circshift(uc,(0,0)),A.lg^2)
+                # uc = reshape(circshift(uc,(0,-δg2[i2r])),A.lg^2)
+                uc = reshape(circshift(uc,(0,0)),A.lg^2)
+                
                 λrc = ur' * uc
                 B.O0[i1r,i1c,i2r,n] = λrc 
                 B.O1[i1r,i1c,i2r,n] = A.Hk[1,i1r,i2r]*λrc
+                # B.O1[i1r,i1c,i2r,n] = A.Hk[1,i1c,i2c]*λrc
             end
         end
 
@@ -116,7 +119,7 @@ function computeHofstadter(;p::Int=7,q::Int=64,ndim::Int=9)
                 Hn[i2r,i2c,i1,n] += sum(view(B.O1,:,:,i2r,n).*θc) * θϕ /B.l1
             end
         end
-        B.H[:,:,i1] = (B.H[:,:,i1]+ B.H[:,:,i1]')/2
+        # B.H[:,:,i1] = (B.H[:,:,i1]+ B.H[:,:,i1]')/2
     end
 
 

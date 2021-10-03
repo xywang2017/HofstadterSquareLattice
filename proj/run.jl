@@ -7,7 +7,7 @@ fpath="/Users/xiaoyuw/Desktop/HofstadterSquareLattice/"
 include(joinpath(fpath,"libs/Hofstadter.jl"))
 
 ##
-q = 83
+q = 32
 # p = 17
 ps = collect(0:q)
 data = Dict()
@@ -21,7 +21,7 @@ save("Q$(q)_results.jld","data",data)
 ##
 fig = figure(figsize=(4,3))
 colors = ["b","b","b","b","b"]
-qs = [25,83]
+qs = [32]
 ϵ0 = π^2/2
 for iq in eachindex(qs)
     q = qs[iq]
@@ -35,7 +35,7 @@ end
 ylabel(L"ϵ")
 xlabel(L"ϕ/ϕ_0")
 tight_layout()
-savefig("energy_fluxv2.pdf")
+# savefig("energy_fluxv1.png")
 display(fig)
 close(fig)
 
@@ -71,7 +71,7 @@ display(fig)
 close(fig)
 
 ##
-h0,hof,hn = computeHofstadter(p=1,q=q);
+h0,hof,hn = computeHofstadter(p=1,q=25);
 
 ##
-sort(abs.(eigvals(hn[:,:,1,4])))
+norm(hof.H[:,:,10]-hof.H[:,:,10]')
