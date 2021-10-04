@@ -19,7 +19,7 @@ mutable struct Hamiltonian
     Hamiltonian() = new()
 end
 
-function initHamiltonian(;lg::Int=11,lk::Int=40,a::Float64=1.0,m::Float64=1.0,V0::Float64=1.0,nbands::Int=1)
+function initHamiltonian(;lg::Int=9,lk::Int=40,a::Float64=1.0,m::Float64=1.0,V0::Float64=1.0,nbands::Int=1)
     A = Hamiltonian()
     A.a = a 
     A.g = 2π/A.a

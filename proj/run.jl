@@ -7,8 +7,8 @@ fpath="/Users/xiaoyu/Code/HofstadterSquareLattice/"
 include(joinpath(fpath,"libs/Hofstadter.jl"))
 
 ##
-q = 64
-ps = collect(0:q)
+q = 32
+ps = collect(0:(2q))
 data = Dict()
 for ip in eachindex(ps)
     @printf("p/q=%d/%d\n",ps[ip],q);
@@ -20,21 +20,21 @@ save("Q$(q)_results.jld","data",data)
 ##
 fig = figure(figsize=(4,3))
 colors = ["b","b","b","b","b"]
-qs = [64]
-ϵ0 = π^2/2
+qs = [32]
+
 for iq in eachindex(qs)
     q = qs[iq]
     data = load("Q$(q)_results.jld","data")
-    ps = collect(0:q)
     for ip in eachindex(ps)
         ϵ = data["$ip"]
-        plot(ones(size(ϵ))*ps[ip]/q,ϵ/ϵ0,".",c=colors[iq],ms=1.5,markerfacecolor="b",markeredgecolor="none")
+        plot(ones(size(ϵ))*ps[ip]/q,ϵ,".",c=colors[iq],ms=1.5,markerfacecolor="b",markeredgecolor="none")
     end
 end
-ylabel(L"ϵ")
+
+ylabel(L"ϵ/ϵ_0")
 xlabel(L"ϕ/ϕ_0")
 tight_layout()
-savefig("energy_flux.pdf")
+# savefig("energy_flux.png")
 display(fig)
 close(fig)
 
@@ -70,7 +70,7 @@ display(fig)
 close(fig)
 
 ##
-h0,hof,hn = computeHofstadter(p=1,q=32);
+h0,hof = computeHofstadter(p=1,q=32);
 
 ##
 
