@@ -3,11 +3,11 @@ using PyPlot
 using Parameters
 using JLD
 using Printf
-fpath="/Users/xiaoyu/Code/HofstadterSquareLattice/"
+fpath="/Users/xiaoyuw/Desktop/HofstadterSquareLattice/"
 include(joinpath(fpath,"libs/Hofstadter.jl"))
 
 ##
-q = 32
+q = 64
 ps = collect(0:(2q))
 data = Dict()
 for ip in eachindex(ps)
@@ -20,11 +20,12 @@ save("Q$(q)_results.jld","data",data)
 ##
 fig = figure(figsize=(4,3))
 colors = ["b","b","b","b","b"]
-qs = [32]
+qs = [64]
 
 for iq in eachindex(qs)
     q = qs[iq]
     data = load("Q$(q)_results.jld","data")
+    ps = 0:q
     for ip in eachindex(ps)
         ϵ = data["$ip"]
         plot(ones(size(ϵ))*ps[ip]/q,ϵ,".",c=colors[iq],ms=1.5,markerfacecolor="b",markeredgecolor="none")
@@ -34,7 +35,7 @@ end
 ylabel(L"ϵ/ϵ_0")
 xlabel(L"ϕ/ϕ_0")
 tight_layout()
-# savefig("energy_flux.png")
+savefig("energy_flux.png")
 display(fig)
 close(fig)
 
