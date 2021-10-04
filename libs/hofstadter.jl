@@ -99,13 +99,14 @@ function computeHofstadter(;p::Int=7,q::Int=64,ndim::Int=9)
 
                 # x/a * (py*a) * 2p/q * ϵ0
                 λrc = ur' * pvec * uc
-                B.O3[:,:,i2r,n] .+= λrc.*V1q 
+                B.O3[:,:,i2r,n] .+= λrc .*V1q 
             end 
         end
     end
 
     # ------------------------------------------------------------------------- #
     Osum = B.O1 - 1im* B.O3*(2*B.p/B.q) + B.O2*(B.p/B.q)^2
+    # Osum = B.O3*(2*B.p/B.q)
 
     B.H = zeros(ComplexF64,B.l2,B.l2,B.l1)
     B.M = zeros(ComplexF64,B.l2,B.l2,B.l1)
