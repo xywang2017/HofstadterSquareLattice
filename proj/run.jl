@@ -3,12 +3,11 @@ using PyPlot
 using Parameters
 using JLD
 using Printf
-fpath="/Users/xiaoyuw/Desktop/HofstadterSquareLattice/"
+fpath="/Users/xiaoyu/Code/HofstadterSquareLattice/"
 include(joinpath(fpath,"libs/Hofstadter.jl"))
 
 ##
-q = 32
-# p = 17
+q = 64
 ps = collect(0:q)
 data = Dict()
 for ip in eachindex(ps)
@@ -21,7 +20,7 @@ save("Q$(q)_results.jld","data",data)
 ##
 fig = figure(figsize=(4,3))
 colors = ["b","b","b","b","b"]
-qs = [32]
+qs = [64]
 ϵ0 = π^2/2
 for iq in eachindex(qs)
     q = qs[iq]
@@ -35,7 +34,7 @@ end
 ylabel(L"ϵ")
 xlabel(L"ϕ/ϕ_0")
 tight_layout()
-# savefig("energy_fluxv1.png")
+savefig("energy_flux.pdf")
 display(fig)
 close(fig)
 
@@ -71,7 +70,17 @@ display(fig)
 close(fig)
 
 ##
-h0,hof,hn = computeHofstadter(p=1,q=25);
+h0,hof,hn = computeHofstadter(p=1,q=32);
 
 ##
-norm(hof.H[:,:,10]-hof.H[:,:,10]')
+
+fig = figure(figsize=(4,3))
+kmesh = h0.kvec ./ (2π)
+kx = real(kmesh)
+ky = imag(kmesh)
+pl = contourf(kx,ky,h0.Hk[1,:,:],cmap="Blues")
+colorbar(pl)
+axis("equal")
+tight_layout()
+display(fig)
+close(fig)
