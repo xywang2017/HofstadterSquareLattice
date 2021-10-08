@@ -7,13 +7,13 @@ fpath="/Users/xiaoyuw/Desktop/HofstadterSquareLattice/"
 include(joinpath(fpath,"libs/HofstadterLL.jl"))
 
 ##
-qs = collect(2:40)
+qs = collect(2:20)
 p = 1
 data = Dict()
 for iq in eachindex(qs)
     println("q=$(qs[iq])")
     q = qs[iq]
-    hof = constructLLHofstadter(q=q,p=p,nLL=20)
+    hof = constructLLHofstadter(q=q,p=p,nLL=40)
     data["$iq"] =  hof.spectrum[:]
 end
 save("LL_results.jld","data",data)
@@ -28,8 +28,9 @@ for iq in eachindex(qs)
     plot(ϕ,ϵ,"b.",ms=0.5,markeredgecolor="none")
 end
 tight_layout()
+# ylim([-10,10])
 display(fig)
 close(fig)
 
 ##
-hof = constructLLHofstadter(q=12,p=1,nLL=5);
+hof = constructLLHofstadter(q=20,p=1,nLL=40);
