@@ -12,6 +12,7 @@ mutable struct HofstadterLL
     k1::Vector{Float64}
     k2::Vector{Float64}
 
+    ϵ0::Float64  # energy unit
     a::Float64
     m::Float64
     g0::Float64
@@ -22,6 +23,7 @@ mutable struct HofstadterLL
     O1::Array{Float64,4}
     H::Array{Float64,4}
     spectrum::Array{Float64,3}
+
     
     HofstadterLL() = new()
 end
@@ -43,21 +45,24 @@ function constructLLHofstadter(;p::Int=1,q::Int=10,lk::Int=20,m::Float64=1.0,a::
     A.k2 = collect(0:(A.l2-1))/A.l2 * A.p/A.q 
     A.kvec = reshape(A.k1,:,1)*A.g0 .+ 1im * reshape(A.k2,1,:)*A.g0 
 
+    A.ϵ0 = (2π)^2/(2*A.m*A.a^2)
+
     # ---- below works for p = 1 ---- #
     A.O0 = zeros(Float64,nLL,nLL,A.l1,A.l2)
     A.O1 = zeros(Float64,nLL,nLL,A.l1,A.l2)
 
     # diagonal part
     for n in 0:(nLL-1)
-        A.O0[n+1,n+1,:,:] .= 1/(A.m*A.lB^2) * (n+0.5) 
-        A.O0[n+1,n+1,:,:] .-= 2*A.V0 * ( cos.(real(A.kvec)*A.q/A.p) + 
+        A.O0[n+1,n+1,:,:] .= 1/(A.m*A.lB^2) * (n+0.5) /A.ϵ0
+        A.O0[n+1,n+1,:,:] .-= 2*A.V0/A.ϵ0 * ( cos.(real(A.kvec)*A.q/A.p) + 
                         real(exp.(1im*A.g0*imag(A.kvec)*A.lB^2 .-A.g0^2*A.lB^2/4)) *laguerrel(n,0,0.5*A.g0^2*A.lB^2) )
     end
     # non-diagonal part 
     for n in 0:(nLL-2)
         for m in (n+1):(nLL-1)
-            A.O1[n+1,m+1,:,:] = -2*A.V0 * sqrt(factorial(big(n))/factorial(big(m))) *  
-                        real(exp.(1im*A.g0*imag(A.kvec)*A.lB^2 .-A.g0^2*A.lB^2/4) *(1im*A.g0*A.lB/sqrt(2))^(m-n) ) * laguerrel(n,m-n,0.5*A.g0^2*A.lB^2) 
+            A.O1[n+1,m+1,:,:] = -2*A.V0/A.ϵ0 * sqrt(factorial(big(n))/factorial(big(m))) *  
+                        real(exp.(1im*A.g0*imag(A.kvec)*A.lB^2 .-A.g0^2*A.lB^2/4) *(1im*A.g0*A.lB/sqrt(2))^(m-n) ) * laguerrel(n,m-n,0.5*A.g0^2*A.lB^2)
+            A.O1[m+1,n+1,:,:] =  A.O1[n+1,m+1,:,:]
         end
     end
 
@@ -65,7 +70,7 @@ function constructLLHofstadter(;p::Int=1,q::Int=10,lk::Int=20,m::Float64=1.0,a::
     A.spectrum = zeros(Float64,nLL,A.l1,A.l2)
     for i2 in eachindex(A.k2)
         for i1 in eachindex(A.k1)
-            A.spectrum[:,i1,i2] = eigvals(Hermitian(A.H[:,:,i1,i2]))
+            A.spectrum[:,i1,i2] = eigvals(A.H[:,:,i1,i2])
         end
     end
     return A

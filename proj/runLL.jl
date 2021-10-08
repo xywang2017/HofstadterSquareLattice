@@ -33,4 +33,4 @@ display(fig)
 close(fig)
 
 ##
-hof = constructLLHofstadter(q=20,p=1,nLL=40);
+hof = constructLLHofstadter(q=2,p=1,nLL=40);
