@@ -27,8 +27,8 @@ mutable struct Hofstadter
 end
 
 function computeHofstadter(;p::Int=7,q::Int=64,ndim::Int=9)
-    lk = q # along k2 direction, different values of l1 decouple
-    A = initHamiltonian(lk=q,V0=3.0)
+    lk = 2q # along k2 direction, different values of l1 decouple
+    A = initHamiltonian(lk=2q,V0=3.0)
     
     B = Hofstadter()
     B.p = p 
@@ -41,7 +41,7 @@ function computeHofstadter(;p::Int=7,q::Int=64,ndim::Int=9)
     B.k2 = A.k2 
     B.kvec = A.kvec 
     B.nbands = A.nbands 
-    B.δq2 = B.p
+    B.δq2 = 2B.p
     
     B.O0 = zeros(Float64,B.l1,B.l1,B.l2,ndim)
     B.O1 = zeros(Float64,B.l1,B.l1,B.l2,ndim)
