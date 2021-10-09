@@ -22,23 +22,23 @@ save("LL_results.jld","data",data)
 
 fig = figure(figsize=(4,3))
 
-data = load("Q64_results.jld","data")
-ps = 0:64
-for ip in eachindex(ps)
-    p = ps[ip]
-    ϵ = data["$ip"]
-    ϕ = ones(size(ϵ)) * p/64
-    plot(ϕ,ϵ,"b.",ms=1,markeredgecolor="none")
-end
+# data = load("Q64_results.jld","data")
+# ps = 0:64
+# for ip in eachindex(ps)
+#     p = ps[ip]
+#     ϵ = data["$ip"]
+#     ϕ = ones(size(ϵ)) * p/64
+#     plot(ϕ,ϵ,"b.",ms=1,markeredgecolor="none")
+# end
 
-data = load("Q27_results.jld","data")
-ps = 0:27
-for ip in eachindex(ps)
-    p = ps[ip]
-    ϵ = data["$ip"]
-    ϕ = ones(size(ϵ)) * p/27
-    plot(ϕ,ϵ,"b.",ms=1,markeredgecolor="none")
-end
+# data = load("Q27_results.jld","data")
+# ps = 0:27
+# for ip in eachindex(ps)
+#     p = ps[ip]
+#     ϵ = data["$ip"]
+#     ϕ = ones(size(ϵ)) * p/27
+#     plot(ϕ,ϵ,"b.",ms=1,markeredgecolor="none")
+# end
 
 data=load("LL_results.jld","data")
 for iq in eachindex(qs)
