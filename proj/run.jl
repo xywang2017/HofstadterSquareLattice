@@ -3,7 +3,7 @@ using PyPlot
 using Parameters
 using JLD
 using Printf
-fpath="/Users/xiaoyu/Code/HofstadterSquareLattice/"
+fpath=pwd()
 include(joinpath(fpath,"libs/Hofstadter.jl"))
 
 ##
